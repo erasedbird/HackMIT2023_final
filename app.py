@@ -19,7 +19,6 @@ STT_URL = "" #see discord
 openai.api_key = 0 #KEY HERE
 
 config = pdfkit.configuration(wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe")
-
 if "text" not in st.session_state:
     st.session_state.text = english
 
@@ -123,7 +122,8 @@ with st.sidebar:
 
     option = st.selectbox(
     st.session_state.text["select_language"],
-    st.session_state.text["languages"])
+    st.session_state.text["languages"], 
+    index=st.session_state.text["index"])
 
     if option == "English":
         st.session_state.text = english
@@ -170,14 +170,15 @@ with st.sidebar:
 
     if st.button(st.session_state.text["pdf"]):
         pdf_content = "# Journal\n### " + date.today().strftime("%B %d, %Y")
-        entrance= 1
+        entrance= 0
         for mess in st.session_state.messages:
             if mess["role"] == "user":
                 pdf_content += "\n#### " +str(entrance)+"\n" + mess["content"]
+                entrance+=1
             elif mess["role"] == "assistant":
                 pdf_content += "\n" + "![Alt text](image"+str(entrance)+".jpg)"
                 pdf_content += "\n" + mess["content"] + "\n\n"
-            entrance+=1
+            
 
         print(pdf_content)
         html_content = markdown.markdown(pdf_content)
