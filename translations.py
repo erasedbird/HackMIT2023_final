@@ -1,5 +1,6 @@
 english= {
     "language":"English",
+    "index":0,
     "name":"Reflexion Buddy",
     "prompt1": "In a natural human way (without labelling the parts), you are providing a sentence of encouragement on the following journal entry. Then, provide a reflective question less than 15 words on the following journal entry.",
     "prompt2":"You are providing 5 words summarizing the following journal entry.",
@@ -19,6 +20,7 @@ english= {
 
 spanish = {
     "language":"Spanish",
+    "index":1,
     "name": "Compañero de Reflexión",
     "prompt1": "De manera natural (sin etiquetar las partes), proporciona una oración de ánimo sobre la siguiente entrada en el diario. Luego, formula una pregunta reflexiva de menos de 15 palabras sobre la siguiente entrada en el diario.",
     "prompt2": "Proporciona 5 palabras que resuman la siguiente entrada en el diario.",
@@ -38,6 +40,7 @@ spanish = {
 
 chinese = {
     "language":"中文",
+    "index":2,
     "name": "反射伙伴",
     "prompt1": "用自然的反射 (不要给部分标记), 写一句鼓励的话关于这片日记条目。然后，写一个问题关于这片日记条目。",
     "prompt2": "请用五个字来描述这片日记条目。",
