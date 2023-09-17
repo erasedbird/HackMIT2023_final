@@ -12,7 +12,7 @@ from datetime import date
 import markdown
 import pdfkit
 import plotly.express as px
-from translations import english, spanish
+from translations import english, spanish, chinese
 
 STT_API_KEY = "" #see discord
 STT_URL = "" #see discord
@@ -129,6 +129,8 @@ with st.sidebar:
         st.session_state.text = english
     elif option == "Spanish":
         st.session_state.text = spanish
+    elif option == "Chinese":
+        st.session_state.text = chinese
 
 
     audio = audiorecorder(st.session_state.text["record"], st.session_state.text["stop"])
@@ -186,10 +188,10 @@ with st.sidebar:
         #pdfkit.from_file("output.html", "output.pdf")
         pdf_options = {
             "page-size": "A4",
-            "margin-top": "2.4mm",
-            "margin-right": "2.4mm",
-            "margin-bottom": "2.4mm",
-            "margin-left": "2.4mm",
+            "margin-top": "10mm",
+            "margin-right": "5mm",
+            "margin-bottom": "10mm",
+            "margin-left": "5mm",
             "enable-local-file-access": ""
         }
 
