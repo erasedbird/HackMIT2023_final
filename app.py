@@ -18,7 +18,7 @@ def question_response(prompt):
         model="gpt-4",
         messages=[
             {"role": "system",
-             "content": "You are providing a reflective question less than 15 words on the following journal entry."},
+             "content": "You are providing a sentence of encouragement on the following journal entry. Then, provide a reflective question less than 15 words on the following journal entry."},
             {"role": "user", "content": prompt},
         ],
         temperature=0.7
