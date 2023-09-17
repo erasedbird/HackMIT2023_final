@@ -17,6 +17,8 @@ With these innovations, we are certain that users' mental health and wellbeing w
 
 Insert gif or link to demo
 
+[Our Presentation](https://www.canva.com/design/DAFuqnJlEwc/eMEc5fwtUu-fE2ynsPnavA/view?utm_content=DAFuqnJlEwc&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
+
 
 ## Screenshots
 
