@@ -12,7 +12,7 @@ from datetime import date
 import markdown
 import pdfkit
 import plotly.express as px
-from translations import english, spanish, chinese
+from translations import english, spanish, chinese, hindi
 
 STT_API_KEY = "" #see discord
 STT_URL = "" #see discord
@@ -131,6 +131,8 @@ with st.sidebar:
         st.session_state.text = spanish
     elif option == "中文":
         st.session_state.text = chinese
+    elif option == "हिंदी":
+        st.session_state.text = hindi
 
 
     audio = audiorecorder(st.session_state.text["record"], st.session_state.text["stop"])
