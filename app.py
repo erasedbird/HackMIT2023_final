@@ -6,6 +6,9 @@ from PIL import Image
 import io
 import requests
 
+STT_API_KEY = "" #see discord
+STT_URL = "" #see discord
+
 image_test_link= "https://cdn.discordapp.com/attachments/1152649972517453844/1152765018807468092/img-LNt9zeZT68IiNZXeGcAZb56O.png"
 
 def load_pil_image_from_link(image_url):
@@ -55,10 +58,21 @@ with st.sidebar:
     audio = audiorecorder("Click to record", "Click to stop recording")
 
     if st.session_state.duration!= audio.duration_seconds:
+
+        audio.export("audio.flac", format="flac")
+        headers = {"Content-Type": "audio/flac"}
+        with open("audio.flac", "rb") as f:
+            response = requests.post(STT_URL, auth=("apikey", STT_API_KEY), headers=headers, files={'audio.flac': f})
+            response_json = response.json()
+            if response_json["results"]:
+                response_text = response_json["results"][0]["alternatives"][0]["transcript"]
+            else:
+                response_text = "No audio detected"
+
         x, y = pyautogui.position()
         pyautogui.click(758, 912)
         pyautogui.moveTo(x, y)
-        pyperclip.copy("text_to_copy")
+        pyperclip.copy(response_text)
         pyautogui.press('end')
         pyautogui.press('space')
         pyautogui.hotkey('ctrl', 'v')
