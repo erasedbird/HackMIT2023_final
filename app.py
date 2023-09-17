@@ -5,11 +5,47 @@ import pyautogui
 from PIL import Image
 import io
 import requests
+import openai
 
 STT_API_KEY = "" #see discord
 STT_URL = "" #see discord
 
 image_test_link= "https://cdn.discordapp.com/attachments/1152649972517453844/1152765018807468092/img-LNt9zeZT68IiNZXeGcAZb56O.png"
+
+openai.api_key = 0 #KEY HERE
+
+def question_response(prompt):
+    question_response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system",
+             "content": "You are providing a reflective question less than 15 words on the following journal entry."},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.7
+    )
+
+    return question_response['choices'][0]['message']['content']
+
+def make_image_url(prompt):
+    summary_response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are providing 5 words summarizing the following journal entry."},
+            {"role": "user", "content": prompt},
+        ]
+    )
+
+    summary = summary_response['choices'][0]['message']['content']
+
+    response = openai.Image.create(
+        prompt=summary + " abstract painting",
+        n=1,
+        size="1024x1024"
+    )
+    image_url = response['data'][0]['url']
+
+    return image_url
 
 def load_pil_image_from_link(image_url):
     response = requests.get(image_url)
@@ -46,11 +82,13 @@ if prompt := st.chat_input("What is up?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    response = f"Echo: {prompt}"
+    response = question_response(prompt)
     # Display assistant response in chat message container
+
+    image_url = make_image_url(prompt)
     with st.chat_message("assistant"):
         st.markdown(response)
-        st.image(load_pil_image_from_link(image_test_link))
+        st.image(load_pil_image_from_link(image_url))
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response, "image": image_test_link})
 
