@@ -138,7 +138,7 @@ with st.sidebar:
     if st.session_state.duration!= audio.duration_seconds:
 
         audio.export("audio.flac", format="flac")
-        headers = {"Content-Type": "audio/flac"}
+        headers = {"Content-Type": "audio/flac", "model": st.session_state.text["ibm"]}
         with open("audio.flac", "rb") as f:
             with st.spinner('Wait for it...'):
                 response = requests.post(STT_URL, auth=("apikey", STT_API_KEY), headers=headers, files={'audio.flac': f})
@@ -159,7 +159,7 @@ with st.sidebar:
 
     if st.session_state.audio_output:
         tts_text = st.session_state.messages[-1]["content"]
-        tts = gTTS(tts_text)
+        tts = gTTS(tts_text, lang = st.session_state.text["gtts"])
         tts.save('hello.mp3')
         st.audio('hello.mp3', format='audio/mp3', start_time=0)
         st.session_state.audio_output = False
