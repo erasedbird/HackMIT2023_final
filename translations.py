@@ -7,7 +7,7 @@ english= {
     "greeting": "What is up?",
     "think": "Let me cook...",
     "select_language": 'Select your Language',
-    "languages":("English", "Español", "中文"),
+    "languages":("English", "Español","中文", "हिंदी"),
     "record": "Click to start recording",
     "stop": "Click to stop recording",
     "Wait":"Wait for it...",
@@ -27,7 +27,7 @@ spanish = {
     "greeting": "¿Qué tal?",
     "think": "Permíteme pensar...",
     "select_language": "Selecciona tu idioma",
-    "languages": ("English", "Español", "中文"),
+    "languages":("English", "Español","中文", "हिंदी"),
     "record": "Haz clic para comenzar a grabar",
     "stop": "Haz clic para detener la grabación",
     "Wait": "Espera un momento...",
@@ -47,7 +47,7 @@ chinese = {
     "greeting": "你好。今天怎么样？",
     "think": "让我想想...",
     "select_language": "选语言",
-    "languages": ("English", "Español","中文"),
+    "languages":("English", "Español","中文", "हिंदी"),
     "record": "录音",
     "stop": "停止录音",
     "Wait": "请稍等一下...",
@@ -56,4 +56,24 @@ chinese = {
     "options": "设置",
     "ibm": "zh-CN_Telephony",
     "gtts": "zh-CN"
+}
+
+hindi = {
+    "language":"हिंदी",
+    "index": 3,
+    "name":"विचार साथी",
+    "prompt1": "प्राकृतिक मानवीय तरीके से (भागों को नाम ना देकर), आप निम्नलिखित जर्नल प्रविष्टि पर प्रोत्साहक वाक्य प्रदान कर रहे हैं। फिर, 15 शब्दों से कम में एक विचारशील प्रश्न प्रदान करें।",
+    "prompt2":"आप निम्नलिखित जर्नल प्रविष्टि को 5 शब्दों में संक्षेपित कर रहे हैं।",
+    "greeting": "नमस्ते",
+    "think": "मुझे सोचने दो...",
+    "select_language": 'अपनी भाषा चुनें',
+    "languages":("English", "Español","中文", "हिंदी"),
+    "record": "रिकॉर्डिंग शुरू करने के लिए क्लिक करें",
+    "stop": "रिकॉर्डिंग रोकने के लिए क्लिक करें",
+    "Wait":"इंतेजार करें...",
+    "Vibe":"आपका वाइब:",
+    "pdf": "PDF बनाएं",
+    "options": "विकल्प",
+    "ibm": "hi-IN_Telephony",
+    "gtts": "hi-IN"
 }
