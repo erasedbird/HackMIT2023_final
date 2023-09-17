@@ -9,9 +9,6 @@ import openai
 
 STT_API_KEY = "" #see discord
 STT_URL = "" #see discord
-
-image_test_link= "https://cdn.discordapp.com/attachments/1152649972517453844/1152765018807468092/img-LNt9zeZT68IiNZXeGcAZb56O.png"
-
 openai.api_key = 0 #KEY HERE
 
 def question_response(prompt):
@@ -87,10 +84,10 @@ if prompt := st.chat_input("What is up?"):
 
     image_url = make_image_url(prompt)
     with st.chat_message("assistant"):
-        st.markdown(response)
         st.image(load_pil_image_from_link(image_url))
+        st.markdown(response)
     # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response, "image": image_test_link})
+    st.session_state.messages.append({"role": "assistant", "content": response, "image": image_url})
 
 with st.sidebar:
     audio = audiorecorder("Click to record", "Click to stop recording")
@@ -100,12 +97,13 @@ with st.sidebar:
         audio.export("audio.flac", format="flac")
         headers = {"Content-Type": "audio/flac"}
         with open("audio.flac", "rb") as f:
-            response = requests.post(STT_URL, auth=("apikey", STT_API_KEY), headers=headers, files={'audio.flac': f})
-            response_json = response.json()
-            if response_json["results"]:
-                response_text = response_json["results"][0]["alternatives"][0]["transcript"]
-            else:
-                response_text = "No audio detected"
+            with st.spinner('Wait for it...'):
+                response = requests.post(STT_URL, auth=("apikey", STT_API_KEY), headers=headers, files={'audio.flac': f})
+                response_json = response.json()
+                if response_json["results"]:
+                    response_text = response_json["results"][0]["alternatives"][0]["transcript"]
+                else:
+                    response_text = "No audio detected"
 
         x, y = pyautogui.position()
         pyautogui.click(758, 912)
