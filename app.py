@@ -127,9 +127,9 @@ with st.sidebar:
 
     if option == "English":
         st.session_state.text = english
-    elif option == "Spanish":
+    elif option == "Español":
         st.session_state.text = spanish
-    elif option == "Chinese":
+    elif option == "中文":
         st.session_state.text = chinese
 
 
