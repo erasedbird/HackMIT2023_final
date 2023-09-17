@@ -1,7 +1,7 @@
 
 # Reflexion Buddy
 
-In the United States, 21% of adults experience at least one mental illness. The most prominent showcase of this was during the COVID-19 pandemic, and we have seen mental health cases persist ever since. When it comes to mental wellbeing, there is one strategy that trumps all the others - journaling.
+In the United States, 21% of adults experience at least one mental illness. The most prominent showcase of this was during the COVID-19 pandemic, and we have seen mental health cases persist ever since. When it comes to mental wellbeing, there is a proven strategy - journaling.
 
 Jouranling promotes a vast array of health benefits, many of which have been shown to help the most successful people achieve their dreams. These benefits include clarity of thought, emotional resilience, boosting creativity, increasing presence, and allowing for documentation.
 
