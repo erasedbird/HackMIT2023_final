@@ -184,7 +184,7 @@ with st.sidebar:
 
         print(pdf_content)
         html_content = markdown.markdown(pdf_content)
-        css = "<style>body{font-family: Tahoma, sans-serif;} img{border-radius: 8px; width: 500px;}</style>"
+        css = "<style>body{font-family: Tahoma, sans-serif;}</style>"
         html_content += css
         with open("output.html", "w") as html_file:
             html_file.write(html_content)
