@@ -55,5 +55,5 @@ chinese = {
     "pdf": "做 PDF",
     "options": "设置",
     "ibm": "zh-CN_Telephony",
-    "gtts": "cmn-CN"
+    "gtts": "zh-CN"
 }

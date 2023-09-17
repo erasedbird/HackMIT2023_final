@@ -138,10 +138,10 @@ with st.sidebar:
     if st.session_state.duration!= audio.duration_seconds:
 
         audio.export("audio.flac", format="flac")
-        headers = {"Content-Type": "audio/flac", "model": st.session_state.text["ibm"]}
+        headers = {"Content-Type": "audio/flac"}
         with open("audio.flac", "rb") as f:
             with st.spinner('Wait for it...'):
-                response = requests.post(STT_URL, auth=("apikey", STT_API_KEY), headers=headers, files={'audio.flac': f})
+                response = requests.post(STT_URL+"?model="+st.session_state.text["ibm"], auth=("apikey", STT_API_KEY), headers=headers, files={'audio.flac': f})
                 response_json = response.json()
                 if response_json["results"]:
                     response_text = response_json["results"][0]["alternatives"][0]["transcript"]
