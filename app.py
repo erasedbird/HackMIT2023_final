@@ -6,6 +6,8 @@ from PIL import Image
 import io
 import requests
 import openai
+from gtts import gTTS
+import time
 
 STT_API_KEY = "" #see discord
 STT_URL = "" #see discord
@@ -61,13 +63,19 @@ if "duration" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+if "images" not in st.session_state:
+    st.session_state.images = 0
+
+if "audio_output" not in st.session_state:
+    st.session_state.audio_output = False
+
 # Display chat messages from history on app rerun
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         if message["role"] == "assistant":
             st.markdown(message["content"])
-            st.image(load_pil_image_from_link(message["image"]))
+            st.image(Image.open(message["image"]))
         else:
             st.markdown(message["content"])
     
@@ -82,12 +90,19 @@ if prompt := st.chat_input("What is up?"):
     response = question_response(prompt)
     # Display assistant response in chat message container
 
-    image_url = make_image_url(prompt)
     with st.chat_message("assistant"):
-        st.image(load_pil_image_from_link(image_url))
-        st.markdown(response)
+        with st.spinner('Let me cook...'):
+            image_url = make_image_url(prompt)
+            image= load_pil_image_from_link(image_url)
+            st.session_state.images= st.session_state.images+1
+            image_name= "image"+str(st.session_state.images)+".jpg"
+            image.save(image_name)
+            st.image(image)
+            st.markdown(response)
     # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response, "image": image_url})
+    st.session_state.messages.append({"role": "assistant", "content": response, "image": image_name})
+    st.session_state.audio_output = True
+
 
 with st.sidebar:
     audio = audiorecorder("Click to record", "Click to stop recording")
@@ -113,3 +128,16 @@ with st.sidebar:
         pyautogui.press('space')
         pyautogui.hotkey('ctrl', 'v')
         st.session_state.duration = audio.duration_seconds
+
+    if st.session_state.audio_output:
+        tts_text = st.session_state.messages[-1]["content"]
+        print(tts_text)
+        tts = gTTS(tts_text)
+        tts.save('hello.mp3')
+
+        st.audio('hello.mp3', format='audio/mp3', start_time=0)
+        st.session_state.audio_output = False
+        time.sleep(0.5)
+        x, y = pyautogui.position()
+        pyautogui.click(56, 331)
+        pyautogui.moveTo(x, y)
