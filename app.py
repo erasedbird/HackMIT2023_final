@@ -140,7 +140,7 @@ with st.sidebar:
         audio.export("audio.flac", format="flac")
         headers = {"Content-Type": "audio/flac"}
         with open("audio.flac", "rb") as f:
-            with st.spinner('Wait for it...'):
+            with st.spinner(st.session_state.text["Wait"]):
                 response = requests.post(STT_URL+"?model="+st.session_state.text["ibm"], auth=("apikey", STT_API_KEY), headers=headers, files={'audio.flac': f})
                 response_json = response.json()
                 if response_json["results"]:
