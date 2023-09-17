@@ -8,17 +8,30 @@ import requests
 import openai
 from gtts import gTTS
 import time
+from datetime import date
+import markdown
+import pdfkit
+import plotly.express as px
+from translations import english, spanish
 
 STT_API_KEY = "" #see discord
 STT_URL = "" #see discord
 openai.api_key = 0 #KEY HERE
+
+config = pdfkit.configuration(wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe")
+
+if "text" not in st.session_state:
+    st.session_state.text = english
+
+if "lang_changed" not in st.session_state:
+    st.session_state.lang_changed = True
 
 def question_response(prompt):
     question_response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
             {"role": "system",
-             "content": "You are providing a sentence of encouragement on the following journal entry. Then, provide a reflective question less than 15 words on the following journal entry."},
+            "content": st.session_state.text["prompt1"]},
             {"role": "user", "content": prompt},
         ],
         temperature=0.7
@@ -30,7 +43,7 @@ def make_image_url(prompt):
     summary_response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "You are providing 5 words summarizing the following journal entry."},
+            {"role": "system", "content": st.session_state.text["prompt2"]},
             {"role": "user", "content": prompt},
         ]
     )
@@ -55,7 +68,7 @@ def load_pil_image_from_link(image_url):
 
 st.write('<style>div.block-container{padding-top:0rem;}</style>', unsafe_allow_html=True)
 
-st.title("Reflexion Buddy")
+st.title(st.session_state.text["name"])
 
 if "duration" not in st.session_state:
     st.session_state.duration = 0
@@ -78,10 +91,9 @@ for message in st.session_state.messages:
             st.image(Image.open(message["image"]))
         else:
             st.markdown(message["content"])
-    
 
 # React to user input
-if prompt := st.chat_input("What is up?"):
+if prompt := st.chat_input(st.session_state.text["greeting"]):
     # Display user message in chat message container
     st.chat_message("user").markdown(prompt)
     # Add user message to chat history
@@ -91,7 +103,7 @@ if prompt := st.chat_input("What is up?"):
     # Display assistant response in chat message container
 
     with st.chat_message("assistant"):
-        with st.spinner('Let me cook...'):
+        with st.spinner(st.session_state.text["think"]):
             image_url = make_image_url(prompt)
             image= load_pil_image_from_link(image_url)
             st.session_state.images= st.session_state.images+1
@@ -104,8 +116,22 @@ if prompt := st.chat_input("What is up?"):
     st.session_state.audio_output = True
 
 
+
 with st.sidebar:
-    audio = audiorecorder("Click to record", "Click to stop recording")
+
+    st.header(st.session_state.text["options"])
+
+    option = st.selectbox(
+    st.session_state.text["select_language"],
+    st.session_state.text["languages"])
+
+    if option == "English":
+        st.session_state.text = english
+    elif option == "Spanish":
+        st.session_state.text = spanish
+
+
+    audio = audiorecorder(st.session_state.text["record"], st.session_state.text["stop"])
 
     if st.session_state.duration!= audio.duration_seconds:
 
@@ -131,13 +157,56 @@ with st.sidebar:
 
     if st.session_state.audio_output:
         tts_text = st.session_state.messages[-1]["content"]
-        print(tts_text)
         tts = gTTS(tts_text)
         tts.save('hello.mp3')
-
         st.audio('hello.mp3', format='audio/mp3', start_time=0)
         st.session_state.audio_output = False
-        time.sleep(0.5)
+        time.sleep(1)
         x, y = pyautogui.position()
-        pyautogui.click(56, 331)
+        pyautogui.click(51, 503)
         pyautogui.moveTo(x, y)
+
+    if st.button(st.session_state.text["pdf"]):
+        pdf_content = "# Journal\n### " + date.today().strftime("%B %d, %Y")
+        entrance= 1
+        for mess in st.session_state.messages:
+            if mess["role"] == "user":
+                pdf_content += "\n#### " +str(entrance)+"\n" + mess["content"]
+            elif mess["role"] == "assistant":
+                pdf_content += "\n" + "![Alt text](image"+str(entrance)+".jpg)"
+                pdf_content += "\n" + mess["content"] + "\n\n"
+            entrance+=1
+
+        print(pdf_content)
+        html_content = markdown.markdown(pdf_content)
+        with open("output.html", "w") as html_file:
+            html_file.write(html_content)
+
+        # Convert HTML to PDF
+        #pdfkit.from_file("output.html", "output.pdf")
+        pdf_options = {
+            "page-size": "A4",
+            "margin-top": "2.4mm",
+            "margin-right": "2.4mm",
+            "margin-bottom": "2.4mm",
+            "margin-left": "2.4mm",
+            "enable-local-file-access": ""
+        }
+
+        # Convert HTML to PDF
+        pdfkit.from_file("output.html", "output.pdf", options=pdf_options, configuration=config)
+
+    st.subheader(st.session_state.text["Vibe"])
+    
+    fig= px.pie(values=[43, 17, 31, 9], names=['Happy', 'Sad', 'Surprise', 'Angry'])
+    fig.update_layout(
+        legend=dict(
+            yanchor="top",
+            y=0.001,
+            xanchor="left",
+            x=0.01,
+            bgcolor=None
+        )
+    )
+    st.plotly_chart(fig, use_container_width=True)
+        
